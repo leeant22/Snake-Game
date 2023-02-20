@@ -26,11 +26,11 @@ public class Snake {
     }
 
     public int getHeadX() {
-        return snakeLength.get(0).getX();
+        return snakeLength.get(0).x;
     }
 
     public int getHeadY() {
-        return snakeLength.get(0).getY();
+        return snakeLength.get(0).y;
     }
     // This method returns the snake's body.
     // Returns:
@@ -62,6 +62,10 @@ public class Snake {
     // This method sets the direction of the snake to right.
     public void goRight() {
         this.direction = "RIGHT";
+    }
+
+    public String getDirection() {
+        return this.direction;
     }
 
     public void moveSnake() {

@@ -25,16 +25,26 @@ public class GameObjects extends JPanel implements ActionListener {
     }
 
     // This method redraws the game window every 100 ms
-    public void reDraw(java.awt.Graphics graphics) {
+    public void paintComponent(java.awt.Graphics graphics) {
         super.paintComponent(graphics);
         Graphics2D graphics2D = (Graphics2D) graphics;
-        graphics2D.setColor(Color.GREEN); // sets background color to green
+        graphics2D.setColor(Color.black); // sets background color to green
         graphics2D.fillRect(0, 0, Game.width * Game.dimension, Game.height * Game.dimension); // paints background color green
-        graphics2D.setColor(Color.RED); // sets color to red
-        graphics2D.fillRect(food.getX() * Game.dimension, food.getY() * Game.dimension, Game.dimension, Game.dimension); // paints red apple
-        graphics2D.setColor(Color.BLUE); // sets color to blue
-        for(Rectangle r: player.getSnakeLength()) { // paints blue snake
-            graphics2D.fill(r);
+        if(state == "START") {
+            graphics2D.setColor(Color.WHITE);
+            graphics2D.drawString("Press Any Key to Begin", Game.width / 2 * Game.dimension - 40, Game.height / 2 * Game.dimension - 20);
+        }
+        else if(state == "ACTIVE") {
+            graphics2D.setColor(Color.red); // sets color to red
+            graphics2D.fillRect(food.getX() * Game.dimension, food.getY() * Game.dimension, Game.dimension, Game.dimension); // paints red apple
+            graphics2D.setColor(Color.blue); // sets color to blue
+            for (Rectangle r : player.getSnakeLength()) { // paints blue snake
+                graphics2D.fill(r);
+            }
+        }
+        else {
+            graphics2D.setColor(Color.white);
+            graphics2D.drawString("Score: " + (player.getSnakeLength().size() - 3), Game.width / 2 * Game.dimension - 40, Game.height / 2 * Game.dimension - 20);
         }
     }
 
@@ -42,5 +52,6 @@ public class GameObjects extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         repaint();
+        game.update();
     }
 }
