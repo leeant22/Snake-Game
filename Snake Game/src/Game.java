@@ -61,7 +61,7 @@ public class Game implements KeyListener {
                 player.removeLife();
                 int temp = 0;
                 for(Rectangle r : player.getSnakeLength()) {
-                    r.setLocation(Game.width / 2 * Game.dimension - (40 + temp), Game.height / 2 * Game.dimension - 20);
+                    r.setLocation(Game.width / 2 * Game.dimension - (40 - temp), Game.height / 2 * Game.dimension - 20);
                     temp ++;
                 }
             }

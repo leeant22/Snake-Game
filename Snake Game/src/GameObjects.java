@@ -36,7 +36,7 @@ public class GameObjects extends JPanel implements ActionListener {
     public void paintComponent(java.awt.Graphics graphics) {
         super.paintComponent(graphics);
         Graphics2D graphics2D = (Graphics2D) graphics;
-        graphics2D.setColor(Color.green); // sets background color to green
+        graphics2D.setColor(Color.black); // sets background color to green
         graphics2D.fillRect(0, 0, Game.width * Game.dimension, Game.height * Game.dimension); // paints background color green
         if(state.equals("START")) {
             graphics2D.setColor(Color.white);
@@ -58,7 +58,7 @@ public class GameObjects extends JPanel implements ActionListener {
                 graphics2D.fillRect(coin.getX() * Game.dimension, coin.getY() * Game.dimension, Game.dimension, Game.dimension);
             }
         }
-        else {
+        else if(state.equals("END")) {
             graphics2D.setColor(Color.white);
             graphics2D.drawString("Score: " + (player.getScore()), Game.width / 2 * Game.dimension - 40, Game.height / 2 * Game.dimension - 20);
         }

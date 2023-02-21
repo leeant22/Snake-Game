@@ -151,6 +151,6 @@ public class Snake {
     // This method removes a life from the snake.
 
     public void removeLife() {
-        this.lives --;
+        lives --;
     }
 }
