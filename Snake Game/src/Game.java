@@ -1,12 +1,15 @@
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class Game implements KeyListener {
     private Snake player;
     private Apple food;
+    private Coin coin;
     private GameObjects gameObject;
     private JFrame gameWindow;
+    public int count = 0;
     public static final int height = 30;
     public static final int width = 30;
     public static final int dimension = 20;
@@ -15,6 +18,7 @@ public class Game implements KeyListener {
         this.gameWindow = new JFrame(); // creates window for game
         this.player = new Snake();
         this.food = new Apple(player);
+        this.coin = new Coin(player, food);
         this.gameObject = new GameObjects(this);
         gameWindow.add(gameObject);
         gameWindow.setTitle("Snake Game"); // sets title for game
@@ -28,16 +32,36 @@ public class Game implements KeyListener {
     }
 
     public void update() {
-        if(gameObject.state == "ACTIVE") {
-            if(checkFood()) {
+        Rectangle head = player.getSnakeLength().get(0); // gets the first rectangle of the snake or the head of the snake
+        Rectangle r = new Rectangle(Game.dimension, Game.dimension);
+        if (gameObject.state.equals("ACTIVE")) {
+            if (checkFood()) {
                 player.increaseSize();
                 food.random(player);
-            }
-            else if(checkWall()) {
+            } else if (checkCoin()) {
+                player.addLives();
+                coin.random(player, food);
+            } else if (checkWall() && player.getLives() == 0) {
+                gameObject.state = "END";
+            } else if (checkSelf() && player.getLives() == 0) {
                 gameObject.state = "END";
             }
-            else if(checkSelf()) {
-                gameObject.state = "END";
+            else if((checkWall() && player.getLives() > 0) || (checkSelf() && player.getLives() > 0)) {
+                player.removeLife();
+                if (player.getDirection().equals("UP")) {
+                    r.setLocation(head.x - Game.dimension, head.y);
+                }
+                else if (player.getDirection().equals("DOWN")) {
+                    r.setLocation(head.x + Game.dimension, head.y);
+                }
+                else if (player.getDirection().equals("LEFT")) {
+                    r.setLocation(head.x, head.y - Game.dimension);
+                }
+                else if(player.getDirection().equals("RIGHT")) {
+                    r.setLocation(head.x, head.y + Game.dimension);
+                }
+                player.getSnakeLength().add(0, r);
+                player.getSnakeLength().remove(player.getSnakeLength().size() - 1);
             }
             else {
                 player.moveSnake();
@@ -45,28 +69,16 @@ public class Game implements KeyListener {
         }
     }
 
+    public Coin getCoin() {
+        return this.coin;
+    }
+
     public Snake getPlayer() {
         return this.player;
     }
 
-    public void setPlayer(Snake player) {
-        this.player = player;
-    }
-
     public Apple getApple() {
         return this.food;
-    }
-
-    public void setApple(Apple food) {
-        this.food = food;
-    }
-
-    public JFrame getWindow() {
-        return this.gameWindow;
-    }
-
-    public void setWindow(JFrame gameWindow) {
-        this.gameWindow = gameWindow;
     }
 
     // Disregard method - Only exists to allow keyPressed method to work
@@ -81,16 +93,16 @@ public class Game implements KeyListener {
     public void keyPressed(KeyEvent key) {
         int keyCode = key.getKeyCode();
         if(gameObject.state.equals("ACTIVE")) {
-            if (keyCode == KeyEvent.VK_W && player.getDirection() != "DOWN") {
+            if (keyCode == KeyEvent.VK_W && !player.getDirection().equals("DOWN")) {
                 player.goUp();
             }
-            else if (keyCode == KeyEvent.VK_A && player.getDirection() != "RIGHT") {
+            else if (keyCode == KeyEvent.VK_A && !player.getDirection().equals("RIGHT")) {
                 player.goLeft();
             }
-            else if (keyCode == KeyEvent.VK_D && player.getDirection() != "LEFT") {
+            else if (keyCode == KeyEvent.VK_D && !player.getDirection().equals("LEFT")) {
                 player.goRight();
             }
-            else if(keyCode == KeyEvent.VK_S && player.getDirection() != "UP"){
+            else if(keyCode == KeyEvent.VK_S && !player.getDirection().equals("UP")) {
                 player.goDown();
             }
         }
@@ -113,6 +125,7 @@ public class Game implements KeyListener {
 
     private boolean checkFood() {
         if(player.getHeadX() == food.getX() * dimension && player.getHeadY() == food.getY() * dimension) {
+            count ++;
             return true;
         }
         return false;
@@ -125,6 +138,15 @@ public class Game implements KeyListener {
             if(x == player.getSnakeLength().get(i).x && y == player.getSnakeLength().get(i).y) {
                 return true;
             }
+        }
+        return false;
+    }
+
+    private boolean checkCoin() {
+        if(player.getHeadX() == coin.getX() * dimension && player.getHeadY() == coin.getY() * dimension) {
+            count ++;
+            player.addLives();
+            return true;
         }
         return false;
     }

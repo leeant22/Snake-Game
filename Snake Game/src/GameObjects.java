@@ -9,6 +9,7 @@ public class GameObjects extends JPanel implements ActionListener {
     public String state;
     private Snake player;
     private Apple food;
+    private Coin coin;
     private Game game;
 
     // Constructs GameObject
@@ -18,6 +19,7 @@ public class GameObjects extends JPanel implements ActionListener {
         this.game = game;
         this.player = game.getPlayer();
         this.food = game.getApple();
+        this.coin = game.getCoin();
 
         this.addKeyListener(game); // adds a keyListener to the game
         this.setFocusable(true);
@@ -30,21 +32,29 @@ public class GameObjects extends JPanel implements ActionListener {
         Graphics2D graphics2D = (Graphics2D) graphics;
         graphics2D.setColor(Color.black); // sets background color to green
         graphics2D.fillRect(0, 0, Game.width * Game.dimension, Game.height * Game.dimension); // paints background color green
-        if(state == "START") {
-            graphics2D.setColor(Color.WHITE);
+        if(state.equals("START")) {
+            graphics2D.setColor(Color.white);
             graphics2D.drawString("Press Any Key to Begin", Game.width / 2 * Game.dimension - 40, Game.height / 2 * Game.dimension - 20);
         }
-        else if(state == "ACTIVE") {
+        else if(state.equals("ACTIVE")) {
             graphics2D.setColor(Color.red); // sets color to red
             graphics2D.fillRect(food.getX() * Game.dimension, food.getY() * Game.dimension, Game.dimension, Game.dimension); // paints red apple
             graphics2D.setColor(Color.blue); // sets color to blue
             for (Rectangle r : player.getSnakeLength()) { // paints blue snake
                 graphics2D.fill(r);
             }
+            if(game.count <= 5 && game.count % 5 == 0 && game.count != 0) {
+                graphics2D.setColor(Color.yellow);
+                graphics2D.fillRect(coin.getX() * Game.dimension, coin.getY() * Game.dimension, Game.dimension, Game.dimension);
+            }
+            else if(game.count > 5 && game.count % 6 - 5 == 0 && game.count != 0 && game.count != 6) {
+                graphics2D.setColor(Color.yellow);
+                graphics2D.fillRect(coin.getX() * Game.dimension, coin.getY() * Game.dimension, Game.dimension, Game.dimension);
+            }
         }
         else {
             graphics2D.setColor(Color.white);
-            graphics2D.drawString("Score: " + (player.getSnakeLength().size() - 3), Game.width / 2 * Game.dimension - 40, Game.height / 2 * Game.dimension - 20);
+            graphics2D.drawString("Score: " + (player.getScore()), Game.width / 2 * Game.dimension - 40, Game.height / 2 * Game.dimension - 20);
         }
     }
 

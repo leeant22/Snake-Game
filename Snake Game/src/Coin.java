@@ -1,12 +1,11 @@
 import java.awt.*;
 
-public class Apple {
+public class Coin {
     private int x;
     private int y;
     private boolean check = true;
-
-    public Apple(Snake player) {
-        this.random(player);
+    public Coin(Snake player, Apple food) {
+        this.random(player, food);
     }
 
     public int getX() {
@@ -16,8 +15,7 @@ public class Apple {
     public int getY() {
         return this.y;
     }
-
-    public void random(Snake player) {
+    public void random(Snake player, Apple food) {
         while(check) {
             check = false;
             x = (int)(Math.random() * Game.width - 1);
@@ -26,6 +24,9 @@ public class Apple {
                 if(r.x == x && r.y == y) {
                     check = true;
                 }
+            }
+            if(x == food.getX() && y == food.getY()) {
+                check = true;
             }
         }
         check = true;

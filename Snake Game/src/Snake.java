@@ -2,6 +2,7 @@ import java.util.*;
 import java.awt.Rectangle;
 public class Snake {
     private ArrayList<Rectangle> snakeLength;
+    private int lives;
     private String direction;
     private final int width = Game.width;
     private final int height = Game.height;
@@ -39,11 +40,6 @@ public class Snake {
         return this.snakeLength;
     }
 
-    // This method sets the snake's body to a new length.
-    public void setSnakeLength() {
-        this.snakeLength = snakeLength;
-    }
-
     // This method sets the direction of the snake to up.
     public void goUp() {
         this.direction = "UP";
@@ -69,16 +65,16 @@ public class Snake {
     }
 
     public void moveSnake() {
-        if(this.direction != "NONE") {
+        if(!this.direction.equals("NONE")) {
             Rectangle head = snakeLength.get(0); // gets the first rectangle of the snake or the head of the snake
             Rectangle r = new Rectangle(Game.dimension, Game.dimension);
-            if(direction == "UP") {
+            if(direction.equals("UP")) {
                 r.setLocation(head.x, head.y - Game.dimension); // creates a new rectangle for snake body 1 pixel up
             }
-            else if(direction == "DOWN") {
+            else if(direction.equals("DOWN")) {
                 r.setLocation(head.x, head.y + Game.dimension); // creates a new rectangle for snake body 1 pixel down
             }
-            else if(direction == "LEFT") {
+            else if(direction.equals("LEFT")) {
                 r.setLocation(head.x - Game.dimension, head.y); // creates a new rectangle for snake body 1 pixel left
             }
             else {
@@ -92,18 +88,34 @@ public class Snake {
     public void increaseSize() {
         Rectangle head = snakeLength.get(0); // gets the first rectangle of the snake or the head of the snake
         Rectangle r = new Rectangle(Game.dimension, Game.dimension);
-        if(direction == "UP") {
+        if(direction.equals("UP")) {
             r.setLocation(head.x, head.y - Game.dimension); // creates a new rectangle for snake body 1 pixel up
         }
-        else if(direction == "DOWN") {
+        else if(direction.equals("DOWN")) {
             r.setLocation(head.x, head.y + Game.dimension); // creates a new rectangle for snake body 1 pixel down
         }
-        else if(direction == "LEFT") {
+        else if(direction.equals("LEFT")) {
             r.setLocation(head.x - Game.dimension, head.y); // creates a new rectangle for snake body 1 pixel left
         }
         else {
             r.setLocation(head.x + Game.dimension, head.y); // creates a new rectangle for snake body 1 pixel right
         }
         snakeLength.add(0, r); // adds the newly created rectangle to the head of the snake
+    }
+
+    public int getScore() {
+        return snakeLength.size() - 3;
+    }
+
+    public void addLives() {
+        lives ++;
+    }
+
+    public int getLives() {
+        return this.lives;
+    }
+
+    public void removeLife() {
+        this.lives --;
     }
 }
