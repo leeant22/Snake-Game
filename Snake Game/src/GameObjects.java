@@ -13,6 +13,7 @@ public class GameObjects extends JPanel implements ActionListener {
     private Game game;
 
     // Constructs GameObject
+
     public GameObjects(Game game) {
         timer.start(); // Starts game timer
         this.state = "START";
@@ -26,11 +27,16 @@ public class GameObjects extends JPanel implements ActionListener {
         this.setFocusTraversalKeysEnabled(false);
     }
 
-    // This method redraws the game window every 100 ms
+    // This method redraws the game window every 100 ms. While the game is running the game will
+    // spawn a coin for every 5 food consumed. If the game has not started, the player will be
+    // prompted to hit any key to start. Once the game ends, the user will be shown their score.
+    // Parameters:
+    //      - graphics: java.awt.Graphics library
+
     public void paintComponent(java.awt.Graphics graphics) {
         super.paintComponent(graphics);
         Graphics2D graphics2D = (Graphics2D) graphics;
-        graphics2D.setColor(Color.black); // sets background color to green
+        graphics2D.setColor(Color.green); // sets background color to green
         graphics2D.fillRect(0, 0, Game.width * Game.dimension, Game.height * Game.dimension); // paints background color green
         if(state.equals("START")) {
             graphics2D.setColor(Color.white);
@@ -58,7 +64,7 @@ public class GameObjects extends JPanel implements ActionListener {
         }
     }
 
-    // This method redraws the game window background everytime the snake moves
+    // This method redraws the game window background everytime the snake moves.
     @Override
     public void actionPerformed(ActionEvent e) {
         repaint();

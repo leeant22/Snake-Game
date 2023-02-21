@@ -8,7 +8,7 @@ public class Snake {
     private final int height = Game.height;
     private final int dimension = Game.dimension;
 
-    // Constructs a snake object
+    // Constructs a snake object out of Rectangles
     public Snake() {
         this.snakeLength = new ArrayList<Rectangle>(); // creates ArrayList object to represent snake body
         Rectangle r = new Rectangle(dimension, dimension); // creates a rectangle with a size of a 1x1 pixel in game window
@@ -26,43 +26,64 @@ public class Snake {
         this.direction = "NONE"; // gives the snake no direction to move in
     }
 
+    // This method returns the x coordinate of the snake's head.
+    // Returns:
+    //      - int: the x coordinate of the snake's head
+
     public int getHeadX() {
         return snakeLength.get(0).x;
     }
 
+    // This method returns the y coordinate of the snake's head.
+    // Returns:
+    //      - int: the y coordinate of the snake's head
+
     public int getHeadY() {
         return snakeLength.get(0).y;
     }
+
     // This method returns the snake's body.
     // Returns:
     //      - ArrayList<Rectangle>: the snake's body
+
     public ArrayList<Rectangle> getSnakeLength() {
         return this.snakeLength;
     }
 
     // This method sets the direction of the snake to up.
+
     public void goUp() {
         this.direction = "UP";
     }
 
     // This method sets the direction of the snake to down.
+
     public void goDown() {
         this.direction = "DOWN";
     }
 
     // This method sets the direction of the snake to left.
+
     public void goLeft() {
         this.direction = "LEFT";
     }
 
     // This method sets the direction of the snake to right.
+
     public void goRight() {
         this.direction = "RIGHT";
     }
 
+    // This method returns the direction that the snake is currently traveling in.
+    // Returns:
+    //      - String: direction that snake is traveling
+
     public String getDirection() {
         return this.direction;
     }
+
+    // This method allows the snake to change directions by adding a pixel (rectangle) / (head)
+    // in the direction that the player wants and removing the last pixel.
 
     public void moveSnake() {
         if(!this.direction.equals("NONE")) {
@@ -85,6 +106,8 @@ public class Snake {
         }
     }
 
+    // This method increases the size of the snake by adding another pixel to the head.
+
     public void increaseSize() {
         Rectangle head = snakeLength.get(0); // gets the first rectangle of the snake or the head of the snake
         Rectangle r = new Rectangle(Game.dimension, Game.dimension);
@@ -103,17 +126,29 @@ public class Snake {
         snakeLength.add(0, r); // adds the newly created rectangle to the head of the snake
     }
 
+    // This method returns the current score.
+    // Returns:
+    //      - int: the current score
+
     public int getScore() {
         return snakeLength.size() - 3;
     }
+
+    // This method adds a life to the snake.
 
     public void addLives() {
         lives ++;
     }
 
+    // This method returns the number of lives of the snake.
+    // Returns:
+    //      - int: the number of lives of the snake
+
     public int getLives() {
         return this.lives;
     }
+
+    // This method removes a life from the snake.
 
     public void removeLife() {
         this.lives --;

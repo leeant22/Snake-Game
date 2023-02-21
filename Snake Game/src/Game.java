@@ -13,55 +13,57 @@ public class Game implements KeyListener {
     public static final int height = 30;
     public static final int width = 30;
     public static final int dimension = 20;
+
     // Constructs Game object
+
     public Game() {
         this.gameWindow = new JFrame(); // creates window for game
         this.player = new Snake();
         this.food = new Apple(player);
         this.coin = new Coin(player, food);
         this.gameObject = new GameObjects(this);
-        gameWindow.add(gameObject);
+        gameWindow.add(gameObject); // adds all game elements to window
         gameWindow.setTitle("Snake Game"); // sets title for game
         gameWindow.setSize(width * dimension + 2, height * dimension + 4); //sets size of game window
         gameWindow.setVisible(true); // makes game window visible
         gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // provides game window with exit button
     }
 
+    // This method sets the state of the game to active to start the game
+
     public void startGame() {
         gameObject.state = "ACTIVE";
     }
 
+    // This method updates the state of the game and keeps the game active as long as the state does not
+    // change to end. The state will change to end if the snake runs into a wall or itself without any
+    // extra lives left. If the snake runs into food, it will increase its size by 1 and will randomly
+    // spawn another food item. If the snake dies with extra lives remaining, it will spawn in the middle
+    // of the screen.
+
     public void update() {
-        Rectangle head = player.getSnakeLength().get(0); // gets the first rectangle of the snake or the head of the snake
-        Rectangle r = new Rectangle(Game.dimension, Game.dimension);
         if (gameObject.state.equals("ACTIVE")) {
             if (checkFood()) {
                 player.increaseSize();
                 food.random(player);
-            } else if (checkCoin()) {
+            }
+            else if (checkCoin()) {
                 player.addLives();
                 coin.random(player, food);
-            } else if (checkWall() && player.getLives() == 0) {
+            }
+            else if (checkWall() && player.getLives() == 0) {
                 gameObject.state = "END";
-            } else if (checkSelf() && player.getLives() == 0) {
+            }
+            else if (checkSelf() && player.getLives() == 0) {
                 gameObject.state = "END";
             }
             else if((checkWall() && player.getLives() > 0) || (checkSelf() && player.getLives() > 0)) {
                 player.removeLife();
-                if (player.getDirection().equals("UP")) {
-                    r.setLocation(head.x - Game.dimension, head.y);
+                int temp = 0;
+                for(Rectangle r : player.getSnakeLength()) {
+                    r.setLocation(Game.width / 2 * Game.dimension - (40 + temp), Game.height / 2 * Game.dimension - 20);
+                    temp ++;
                 }
-                else if (player.getDirection().equals("DOWN")) {
-                    r.setLocation(head.x + Game.dimension, head.y);
-                }
-                else if (player.getDirection().equals("LEFT")) {
-                    r.setLocation(head.x, head.y - Game.dimension);
-                }
-                else if(player.getDirection().equals("RIGHT")) {
-                    r.setLocation(head.x, head.y + Game.dimension);
-                }
-                player.getSnakeLength().add(0, r);
-                player.getSnakeLength().remove(player.getSnakeLength().size() - 1);
             }
             else {
                 player.moveSnake();
@@ -69,13 +71,25 @@ public class Game implements KeyListener {
         }
     }
 
+    // This method gets the coin (extra life).
+    // Returns:
+    //      - Coin: the coin object
+
     public Coin getCoin() {
         return this.coin;
     }
 
+    // This method gets the player (snake).
+    // Returns:
+    //      - Snake: the snake object
+
     public Snake getPlayer() {
         return this.player;
     }
+
+    // This method gets the apple (food).
+    // Returns:
+    //      - Apple: the apple object
 
     public Apple getApple() {
         return this.food;
@@ -87,8 +101,9 @@ public class Game implements KeyListener {
     }
 
     @Override
-    // This method detects when a key is pressed and changes the direction of the snake
-    // Parameter:
+    // This method detects when a key is pressed and changes the direction of the snake if the
+    // game is actively running. If it is not running, it will start the game if a key is pressed.
+    // Parameters:
     //      - key: key that is pressed by user
     public void keyPressed(KeyEvent key) {
         int keyCode = key.getKeyCode();
@@ -116,12 +131,19 @@ public class Game implements KeyListener {
     public void keyReleased(KeyEvent e) {
     }
 
+    // This method checks if the snake's head has hit a wall.
+    // Returns:
+    //      - boolean: true if snake's head hits a wall false otherwise
     private boolean checkWall() {
         if(player.getHeadX() < 0 || player.getHeadX() >= width * dimension || player.getHeadY() < 0 || player.getHeadY() >= height * dimension) {
             return true;
         }
         return false;
     }
+
+    // This method checks if the snake's head has hit a food item.
+    // Returns:
+    //      - boolean: true if snake's head hits a food item false otherwise
 
     private boolean checkFood() {
         if(player.getHeadX() == food.getX() * dimension && player.getHeadY() == food.getY() * dimension) {
@@ -130,6 +152,10 @@ public class Game implements KeyListener {
         }
         return false;
     }
+
+    // This method checks if the snake's head has hit its own body.
+    // Returns:
+    //      - boolean: true if the snake's head hits its own body false otherwise
 
     private boolean checkSelf() {
         int x = player.getHeadX();
@@ -141,6 +167,10 @@ public class Game implements KeyListener {
         }
         return false;
     }
+
+    // This method checks if the snake's head has hit a coin (extra life).
+    // Returns:
+    //      - boolean: true if the snake's head hits a coin false otherwise
 
     private boolean checkCoin() {
         if(player.getHeadX() == coin.getX() * dimension && player.getHeadY() == coin.getY() * dimension) {
