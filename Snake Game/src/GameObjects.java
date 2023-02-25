@@ -27,6 +27,16 @@ public class GameObjects extends JPanel implements ActionListener {
         this.setFocusTraversalKeysEnabled(false);
     }
 
+    // This method stops the game timer.
+    public void stopTimer() {
+        timer.stop();
+    }
+
+    // This method starts the game timer.
+    public void startTimer() {
+        timer.start();
+    }
+
     // This method redraws the game window every 100 ms. While the game is running the game will
     // spawn a coin for every 5 food consumed. If the game has not started, the player will be
     // prompted to hit any key to start. Once the game ends, the user will be shown their score.

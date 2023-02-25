@@ -59,11 +59,14 @@ public class Game implements KeyListener {
             }
             else if((checkWall() && player.getLives() > 0) || (checkSelf() && player.getLives() > 0)) {
                 player.removeLife();
+                player.removeLife();
                 int temp = 0;
                 for(Rectangle r : player.getSnakeLength()) {
                     r.setLocation(Game.width / 2 * Game.dimension - (40 - temp), Game.height / 2 * Game.dimension - 20);
                     temp ++;
                 }
+                gameObject.stopTimer();
+                gameObject.startTimer();
             }
             else {
                 player.moveSnake();
